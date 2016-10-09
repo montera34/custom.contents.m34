@@ -22,4 +22,27 @@ $cpts = array(
 
 	)
 );
+
+// TAXONOMIES DATA
+$taxs = array(
+	'tax-id' => array(
+		'labels' => array(
+			'name' => __( '','m34_cc' ),
+			'singular_name' => __( '','m34_cc' ),
+			'search_items' => __( 'Search','m34_cc' ),
+			'all_items' => __( 'All items','m34_cc' ),
+			'parent_item' => __( 'Parent','m34_cc' ),
+			'parent_item_colon' => __( 'Parent:','m34_cc' ),
+			'edit_item' => __( 'Edit','m34_cc' ),
+			'update_item' => __( 'Update','m34_cc' ),
+			'add_new_item' => __( 'Add new','m34_cc' ),
+			'new_item_name' => __( 'Name of the new item' ),
+			'menu_name' => __( '','m34_cc' )
+		),
+		'slug' => 'tax-slug',
+		'description' => __( '','m34_cc' ),
+		'cpts' => array(),
+		'hierarchical' => true
+	)
+);
 ?>

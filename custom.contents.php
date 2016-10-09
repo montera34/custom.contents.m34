@@ -20,7 +20,7 @@ add_action( 'plugins_loaded', 'm34_cc_load_textdomain' );
 
 // Add custom post types and taxonomies
 add_action(  'init', 'm34_cc_create_post_type', 0 );
-//add_action( 'init', 'm34_cc_build_taxonomies', 0 );
+add_action( 'init', 'm34_cc_build_taxonomies', 0 );
 register_activation_hook( __FILE__, 'm34_cc_rewrite_flush' );
 
 
@@ -50,6 +50,20 @@ function m34_cc_create_post_type() {
 			'_builtin' => false,
 			//'capability_type' => 'post'
 		));
+	}
+}
+// TAXONOMIES
+function m34_cc_build_taxonomies() {
+	global $taxs;
+	foreach ( $taxs as $tax => $data ) {
+		register_taxonomy( $tax, $data['cpts'], array(
+			'labels' => $data['labels'],
+			'description' => $data['description'],
+			'hierarchical' => $data['hierarchical'],
+			'query_var' => $data['slug'],
+			'rewrite' => array( 'slug' => $data['slug'], 'with_front' => false ),
+			'show_admin_column' => true
+		) );
 	}
 }
 
