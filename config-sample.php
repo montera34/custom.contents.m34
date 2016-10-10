@@ -45,4 +45,36 @@ $taxs = array(
 		'hierarchical' => true
 	)
 );
+
+// CUSTOM META BOXES
+$prefix = "_prefix";
+$fields = array(
+	'cpt-id' => array(
+		'context' => 'normal', // context: normal, side, advanced
+		'priority' => 'default' // priority: high, core, default, low
+		'fields' => array(
+			$prefix.'metabox-id' => array(
+				'name' => __('','m34_cc'),
+				'description' => __('','m34_cc'),
+				'type' => 'text', // text, date, color, wysiwyg
+			),
+			$prefix.'metabox2-id' => array(
+				'name' => __('','m34_cc'),
+				'description' => __('','m34_cc'),
+				'type' => 'text',
+			)
+		)
+	),
+	'cpt2-id' => array(
+		'context' => 'normal', // context: normal, side, advanced
+		'priority' => 'default' // priority: high, core, default, low
+		'fields' => array(
+			$prefix.'metabox3-id' => array(
+				'name' => __('','m34_cc'),
+				'description' => __('','m34_cc'),
+				'type' => 'text',
+			)
+		)
+	)
+);
 ?>
