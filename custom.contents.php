@@ -128,11 +128,16 @@ function m34_cc_metaboxes_callback($post) {
 			<strong><label for="'.$id.'">'.$data["name"].'</label></strong><br />';
 
 		if ( $data['type'] == 'wysiwyg' ) {
-			wp_editor($value,$id);
+			$args = (array_key_exists('args',$data)) ? $data['args'] : '';
+			$args['textarea_name'] = $id;
+			if ( !array_key_exists('textarea_rows',$args) ) { $args['textarea_rows'] = '5'; }
+			if ( !array_key_exists('media_buttons',$args) ) { $args['media_buttons'] = false; }
+			wp_editor($value,$id,$args);
 		} else {
 			echo '<input type="text" class="'.$id.'" name="'.$id.'" value="' . esc_attr( $value ) . '" /><br /><span class="howto">'.$data["description"].'</span>';
 		}
- 		if ( $data['type'] == 'color' ) {
+
+		if ( $data['type'] == 'color' ) {
 			echo '<script type="text/javascript">
 			jQuery(document).ready(function($) {
 				$(".'.$id.'").wpColorPicker();
@@ -168,13 +173,13 @@ function m34_cc_save_metaboxes($post_id, $post, $update) {
 	if(defined("DOING_AUTOSAVE") && DOING_AUTOSAVE)
 		return $post_id;
 
-	foreach ( $fiels[$post->post_type]['fields'] as $id => $data ) {
+	foreach ( $fields[$post->post_type]['fields'] as $id => $data ) {
 
 		if( isset($_POST[$id]) ) {
 			$value = sanitize_text_field($_POST[$id]);
 			update_post_meta($post_id, $id, $value);
 		}
-	}   
+	}
 }
 // end
 // CUSTOM METABOXES

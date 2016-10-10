@@ -72,7 +72,12 @@ $fields = array(
 			$prefix.'metabox3-id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
-				'type' => 'text',
+				'type' => 'wysiwyg',
+				'args' => array(
+					'media_buttons' => 'false',
+					'textarea_rows' => '5'
+				)
+
 			)
 		)
 	)
