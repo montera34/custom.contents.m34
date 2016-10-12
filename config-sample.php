@@ -46,12 +46,15 @@ $taxs = array(
 	)
 );
 
-// CUSTOM META BOXES
+// PREFIX
+// for all post meta and term meta fields
 $prefix = "_prefix";
+
+// POST CUSTOM META BOXES
 $fields = array(
 	'cpt-id' => array(
 		'context' => 'normal', // context: normal, side, advanced
-		'priority' => 'default' // priority: high, core, default, low
+		'priority' => 'default', // priority: high, core, default, low
 		'fields' => array(
 			$prefix.'metabox-id' => array(
 				'name' => __('','m34_cc'),
@@ -67,7 +70,7 @@ $fields = array(
 	),
 	'cpt2-id' => array(
 		'context' => 'normal', // context: normal, side, advanced
-		'priority' => 'default' // priority: high, core, default, low
+		'priority' => 'default', // priority: high, core, default, low
 		'fields' => array(
 			$prefix.'metabox3-id' => array(
 				'name' => __('','m34_cc'),
@@ -78,6 +81,33 @@ $fields = array(
 					'textarea_rows' => '5'
 				)
 
+			)
+		)
+	)
+);
+
+// TERM META
+$term_meta = array(
+	'cpt-id' => array(
+		'fields' => array(
+			$prefix.'metabox-id' => array(
+				'name' => __('','m34_cc'),
+				'description' => __('','m34_cc'),
+				'type' => 'text' // text, image
+			),
+			$prefix.'metabox2-id' => array(
+				'name' => __('','m34_cc'),
+				'description' => __('','m34_cc'),
+				'type' => 'image'
+			)
+		)
+	),
+	'cpt2-id' => array(
+		'fields' => array(
+			$prefix.'metabox3-id' => array(
+				'name' => __('','m34_cc'),
+				'description' => __('','m34_cc'),
+				'type' => 'text'
 			)
 		)
 	)

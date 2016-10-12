@@ -29,7 +29,15 @@ add_action( "add_meta_boxes", "m34_cc_metaboxes", 10, 2 );
 add_action("save_post", "m34_cc_save_metaboxes", 10, 3);
 // register and load scripts
 add_action( 'admin_enqueue_scripts', 'm34_cc_load_admin_scripts' );
-
+// term meta
+add_action( 'init', 'm34_cc_termmeta_register' );
+foreach ( $term_meta as $tax => $data ) {
+	add_action( $tax.'_add_form_fields', 'm34_cc_termmeta_add_fields', 10, 2 );
+	add_action( $tax.'_edit_form_fields', 'm34_cc_termmeta_edit_fields', 10, 2 );
+	// edit_$tax and edited_$tax both work as action hooks
+	add_action( 'edit_'.$tax,   'm34_cc_termmeta_save_fields' );
+	add_action( 'create_'.$tax, 'm34_cc_termmeta_save_fields' );
+}
 // TEXT DOMAIN
 // and
 // STRING TRANSLATION
@@ -50,6 +58,7 @@ function m34_cc_load_admin_scripts() {
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_style( 'jquery-style', 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' );
 //	}
+		wp_enqueue_script( 'term-meta-image',plugins_url('js/term-meta-image.js',__FILE__),false,'0.1',true );
 
 }
 
@@ -183,3 +192,82 @@ function m34_cc_save_metaboxes($post_id, $post, $update) {
 }
 // end
 // CUSTOM METABOXES
+
+// TERM META
+// register term metas
+function m34_cc_termmeta_register() {
+	global $term_meta;
+	$args = array(
+		'single' => true,
+		'show_in_rest' => true
+	);
+	foreach ( $term_meta as $tax ) {
+		foreach ( $tax['fields'] as $id => $f ) {
+			register_meta( 'term', $id, $args );
+		}
+	}
+}
+
+// Add field to new term form
+function m34_cc_termmeta_add_fields($taxonomy) {
+	global $term_meta;
+	wp_nonce_field( basename( __FILE__ ), 'm34_cc_termmeta_fields_nonce' );
+	foreach ( $term_meta[$taxonomy]['fields'] as $id => $f ) {
+	
+		if ( $f['type'] == 'image' ) {
+			wp_enqueue_media();
+			echo '<script type="text/javascript">
+				var m34_cc_bgimageId = "'.$id.'";
+			</script>';
+			$btn = '<input type="button" id="'.$id.'-button" class="button" value="'.__("Choose or Upload an Image","m34_cc").'" />';
+		} else { $btn = ''; }
+		echo '<div class="form-field term-group uploader">
+			<label for="'.$id.'">'.$f["name"].'</label>
+			<input type="text" name="'.$id.'" id="'.$id.'" value="" />
+			'.$btn.'
+		</div>';
+	}
+}
+// Add field to edit term form
+function m34_cc_termmeta_edit_fields($term,$taxonomy) {
+	global $term_meta;
+	wp_nonce_field( basename( __FILE__ ), "m34_cc_termmeta_fields_nonce" );
+	foreach ( $term_meta[$taxonomy]['fields'] as $id => $f ) {
+		$value = get_term_meta( $term->term_id, $id, true );
+		if ( $f['type'] == 'image' ) {
+			wp_enqueue_media();
+			echo '<script type="text/javascript">
+				var m34_cc_bgimageId = "'.$id.'";
+			</script>';
+			$btn = '<input type="button" id="'.$id.'-button" class="button" value="'.__("Choose or Upload an Image","m34_cc").'" />';
+		} else { $btn = ''; }
+
+		echo '<tr class="form-field">
+			<th scope="row"><label for="'.$id.'">'.$f['name'].'</label></th>
+			<td>	
+				<input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" />
+				'.$btn.'
+			</td>
+		</tr>';
+	}
+}
+
+// Save data
+function m34_cc_termmeta_save_fields( $term_id ){
+	if ( ! isset( $_POST['m34_cc_termmeta_fields_nonce'] ) || ! wp_verify_nonce( $_POST['m34_cc_termmeta_fields_nonce'], basename( __FILE__ ) ) )
+		return;
+
+	$taxonomy = $_POST['taxonomy'];
+	global $term_meta;
+	foreach ( $term_meta[$taxonomy]['fields'] as $id => $f ) {
+		$value_old = get_term_meta( $term_id, $id, true );
+		$value_new = isset( $_POST[$id] ) ? sanitize_text_field( $_POST[$id] ) : '';
+		//$value_new =  $_POST[$id];
+
+		if ( $value_old != '' && '' === $value_new ) {
+			delete_term_meta( $term_id, $id );
+		} elseif ( $value_old !== $value_new ) {
+			update_term_meta( $term_id, $id, $value_new );
+		}	
+	}
+}
