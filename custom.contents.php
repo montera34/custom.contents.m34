@@ -47,19 +47,19 @@ function m34_cc_load_textdomain() {
 
 // ADMIN SCRIPTS
 function m34_cc_load_admin_scripts() {
+	global $pagenow;
 	//	global $fields;
 	//	$fields data is not loaded in this moment
 	//	i dont know why
-//	if ( in_array('color',$fields) ) {
+	if ( $pagenow == 'post.php' || $pagenow == 'edit-tags.php' || $pagenow == 'term.php' ) {
 		wp_enqueue_style( 'wp-color-picker' ); 
 		wp_enqueue_script( 'wp-color-picker' );
-//	}
-//	if ( in_array('date',$fields) ) {
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_style( 'jquery-style', 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' );
-//	}
+	}
+	if ( $pagenow == 'edit-tags.php' || $pagenow == 'term.php' ) {
 		wp_enqueue_script( 'term-meta-image',plugins_url('js/term-meta-image.js',__FILE__),false,'0.1',true );
-
+	}
 }
 
 
@@ -106,6 +106,7 @@ function m34_cc_build_taxonomies() {
 // to init post type and taxonomies
 function m34_cc_rewrite_flush() {
 	m34_cc_create_post_type();
+	m34_cc_build_taxonomies();
 	flush_rewrite_rules();
 }
 
@@ -220,11 +221,19 @@ function m34_cc_termmeta_add_fields($taxonomy) {
 				var m34_cc_bgimageId = "'.$id.'";
 			</script>';
 			$btn = '<input type="button" id="'.$id.'-button" class="button" value="'.__("Choose or Upload an Image","m34_cc").'" />';
+		} elseif ( $f['type'] == 'color' ) {
+			echo '<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".'.$id.'").wpColorPicker();
+			});
+			</script>';
+			$btn = '';
 		} else { $btn = ''; }
 		echo '<div class="form-field term-group uploader">
 			<label for="'.$id.'">'.$f["name"].'</label>
-			<input type="text" name="'.$id.'" id="'.$id.'" value="" />
+			<input class="'.$id.'" type="text" name="'.$id.'" id="'.$id.'" value="" />
 			'.$btn.'
+			<p class="description">'.$f["description"].'</p>
 		</div>';
 	}
 }
@@ -240,13 +249,21 @@ function m34_cc_termmeta_edit_fields($term,$taxonomy) {
 				var m34_cc_bgimageId = "'.$id.'";
 			</script>';
 			$btn = '<input type="button" id="'.$id.'-button" class="button" value="'.__("Choose or Upload an Image","m34_cc").'" />';
+		} elseif ( $f['type'] == 'color' ) {
+			echo '<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".'.$id.'").wpColorPicker();
+			});
+			</script>';
+			$btn = '';
 		} else { $btn = ''; }
 
 		echo '<tr class="form-field">
 			<th scope="row"><label for="'.$id.'">'.$f['name'].'</label></th>
 			<td>	
-				<input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" />
+				<input class="'.$id.'" type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" />
 				'.$btn.'
+				<p class="description">'.$f["description"].'</p>
 			</td>
 		</tr>';
 	}
@@ -261,8 +278,11 @@ function m34_cc_termmeta_save_fields( $term_id ){
 	global $term_meta;
 	foreach ( $term_meta[$taxonomy]['fields'] as $id => $f ) {
 		$value_old = get_term_meta( $term_id, $id, true );
-		$value_new = isset( $_POST[$id] ) ? sanitize_text_field( $_POST[$id] ) : '';
-		//$value_new =  $_POST[$id];
+		if ( $f['type'] == 'color' ) {
+			$value_new = isset( $_POST[$id] ) ? m34_cc_sanitize_color( $_POST[$id] ) : '';
+		} else {
+			$value_new = isset( $_POST[$id] ) ? sanitize_text_field( $_POST[$id] ) : '';
+		}
 
 		if ( $value_old != '' && '' === $value_new ) {
 			delete_term_meta( $term_id, $id );
@@ -270,4 +290,10 @@ function m34_cc_termmeta_save_fields( $term_id ){
 			update_term_meta( $term_id, $id, $value_new );
 		}	
 	}
+}
+
+// Sanitize color
+function m34_cc_sanitize_color( $color ) {
+	$color = ltrim( $color, '#' );
+	return preg_match( '/([A-Fa-f0-9]{3}){1,2}$/', $color ) ? '#'.$color : '';
 }

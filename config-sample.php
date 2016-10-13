@@ -93,7 +93,7 @@ $term_meta = array(
 			$prefix.'metabox-id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
-				'type' => 'text' // text, image
+				'type' => 'text' // text, image, color
 			),
 			$prefix.'metabox2-id' => array(
 				'name' => __('','m34_cc'),
@@ -107,7 +107,7 @@ $term_meta = array(
 			$prefix.'metabox3-id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
-				'type' => 'text'
+				'type' => 'color'
 			)
 		)
 	)
