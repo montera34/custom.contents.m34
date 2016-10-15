@@ -64,7 +64,10 @@ $fields = array(
 			$prefix.'metabox2-id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
-				'type' => 'text',
+				'type' => 'date',
+				'args' => array(
+					'format' => 'yy', // http://api.jqueryui.com/datepicker/#option-dateFormat
+				)
 			)
 		)
 	),

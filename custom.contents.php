@@ -157,7 +157,7 @@ function m34_cc_metaboxes_callback($post) {
 			echo '<script type="text/javascript">
 			jQuery(document).ready(function($) {
 				$(".'.$id.'").datepicker({
-					dateFormat : "yy-mm-dd"
+					dateFormat : "'.$data['args']['format'].'"
 				});
 			});
 			</script>';
