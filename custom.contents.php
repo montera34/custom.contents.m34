@@ -6,13 +6,17 @@ Version: 0.1
 Author: montera34
 Author URI: http://montera34.com
 License: GPLv3+
+Text Domain: m34_cc
+Domain Path: /languages/
  */
 
 // VARS
-$ur_ver = "0.1";
+$m34_cc_ver = "0.1";
 
 // INCLUDE CONFIG FILE
-require_once('config.php');
+//include('config.php');
+//include_once( plugin_dir_path( __FILE__ ) . 'config.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'config.php' );
 
 // ACTIONS
 // and
@@ -24,6 +28,7 @@ add_action( 'plugins_loaded', 'm34_cc_load_textdomain' );
 add_action(  'init', 'm34_cc_create_post_type', 0 );
 add_action( 'init', 'm34_cc_build_taxonomies', 0 );
 register_activation_hook( __FILE__, 'm34_cc_rewrite_flush' );
+register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 // Adds custom metaboxes
 add_action( "add_meta_boxes", "m34_cc_metaboxes", 10, 2 );
 add_action("save_post", "m34_cc_save_metaboxes", 10, 3);
@@ -42,7 +47,7 @@ foreach ( $term_meta as $tax => $data ) {
 // and
 // STRING TRANSLATION
 function m34_cc_load_textdomain() {
-	load_plugin_textdomain( 'm34_cc', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
+	load_plugin_textdomain( 'm34_cc', false, basename( dirname( __FILE__ ) ) . 'languages/' ); 
 }
 
 // ADMIN SCRIPTS
@@ -58,10 +63,9 @@ function m34_cc_load_admin_scripts() {
 		wp_enqueue_style( 'jquery-style', 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' );
 	}
 	if ( $pagenow == 'edit-tags.php' || $pagenow == 'term.php' ) {
-		wp_enqueue_script( 'term-meta-image',plugins_url('js/term-meta-image.js',__FILE__),false,'0.1',true );
+		wp_enqueue_script( 'term-meta-image',plugins_url('js/term-meta-image.js',__FILE__),false,$m34_cc_ver,true );
 	}
 }
-
 
 // POST TYPES
 function m34_cc_create_post_type() {
