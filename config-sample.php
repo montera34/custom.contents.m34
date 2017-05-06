@@ -51,17 +51,18 @@ $taxs = array(
 $prefix = "_prefix";
 
 // POST CUSTOM META BOXES
+// CMB IDs must not use hyphen (-) or blank spaces ( )
 $fields = array(
-	'cpt-id' => array(
+	'cpt_id' => array(
 		'context' => 'normal', // context: normal, side, advanced
 		'priority' => 'default', // priority: high, core, default, low
 		'fields' => array(
-			$prefix.'metabox-id' => array(
+			$prefix.'metabox_id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
 				'type' => 'text', // text, date, color, wysiwyg
 			),
-			$prefix.'metabox2-id' => array(
+			$prefix.'metabox2_id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
 				'type' => 'date',
@@ -71,11 +72,11 @@ $fields = array(
 			)
 		)
 	),
-	'cpt2-id' => array(
+	'cpt2_id' => array(
 		'context' => 'normal', // context: normal, side, advanced
 		'priority' => 'default', // priority: high, core, default, low
 		'fields' => array(
-			$prefix.'metabox3-id' => array(
+			$prefix.'metabox3_id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
 				'type' => 'wysiwyg',
@@ -91,23 +92,23 @@ $fields = array(
 
 // TERM META
 $term_meta = array(
-	'cpt-id' => array(
+	'cpt_id' => array(
 		'fields' => array(
-			$prefix.'metabox-id' => array(
+			$prefix.'metabox_id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
 				'type' => 'text' // text, image, color
 			),
-			$prefix.'metabox2-id' => array(
+			$prefix.'metabox2_id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
 				'type' => 'image'
 			)
 		)
 	),
-	'cpt2-id' => array(
+	'cpt2_id' => array(
 		'fields' => array(
-			$prefix.'metabox3-id' => array(
+			$prefix.'metabox3_id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
 				'type' => 'color'

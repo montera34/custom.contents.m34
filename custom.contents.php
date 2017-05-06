@@ -4,7 +4,7 @@ Plugin Name: Custom contents for a WordPress site
 Description: Adds custom post types and custom fiels to a WordPress site.
 Version: 0.1
 Author: montera34
-Author URI: http://montera34.com
+Author URI: https://montera34.com
 License: GPLv3+
 Text Domain: m34_cc
 Domain Path: /languages/
