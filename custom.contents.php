@@ -190,7 +190,8 @@ function m34_cc_save_metaboxes($post_id, $post, $update) {
 	foreach ( $fields[$post->post_type]['fields'] as $id => $data ) {
 
 		if( isset($_POST[$id]) ) {
-			$value = sanitize_text_field($_POST[$id]);
+			if ( $data['type'] == 'wysiwyg' ) { $value = wp_kses_post($_POST[$id]); }
+			else { $value = sanitize_text_field($_POST[$id]); }
 			update_post_meta($post_id, $id, $value);
 		}
 	}
