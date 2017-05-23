@@ -60,7 +60,7 @@ $fields = array(
 			$prefix.'metabox_id' => array(
 				'name' => __('','m34_cc'),
 				'description' => __('','m34_cc'),
-				'type' => 'text', // text, date, color, wysiwyg
+				'type' => 'text', // text, date, color, wysiwyg, file
 			),
 			$prefix.'metabox2_id' => array(
 				'name' => __('','m34_cc'),

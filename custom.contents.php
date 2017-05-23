@@ -61,8 +61,8 @@ function m34_cc_load_admin_scripts() {
 		wp_enqueue_script( 'wp-color-picker' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_style( 'jquery-style', 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' );
-	}
-	if ( $pagenow == 'edit-tags.php' || $pagenow == 'term.php' ) {
+//	}
+//	if ( $pagenow == 'edit-tags.php' || $pagenow == 'term.php' ) {
 		wp_enqueue_script( 'term-meta-image',plugins_url('js/term-meta-image.js',__FILE__),false,$m34_cc_ver,true );
 	}
 }
@@ -147,8 +147,15 @@ function m34_cc_metaboxes_callback($post) {
 			if ( !array_key_exists('textarea_rows',$args) ) { $args['textarea_rows'] = '5'; }
 			if ( !array_key_exists('media_buttons',$args) ) { $args['media_buttons'] = false; }
 			wp_editor($value,$id,$args);
+		} elseif ( $data['type'] == 'file' ) {
+			echo '
+			<input type="text" class="'.$id.'" name="'.$id.'" id="'.$id.'" value="' . esc_attr( $value ) . '" /><input type="button" id="'.$id.'-button" class="button" value="'.__("Choose a file or Upload a new one","m34_cc").'" />
+			<br /><span class="howto">'.$data["description"].'</span>';
+			echo '<script type="text/javascript">
+				var m34_cc_bgimageId = "'.$id.'";
+			</script>';
 		} else {
-			echo '<input type="text" class="'.$id.'" name="'.$id.'" value="' . esc_attr( $value ) . '" /><br /><span class="howto">'.$data["description"].'</span>';
+			echo '<input type="text" class="'.$id.'" name="'.$id.'" id="'.$id.'" value="' . esc_attr( $value ) . '" /><br /><span class="howto">'.$data["description"].'</span>';
 		}
 
 		if ( $data['type'] == 'color' ) {
@@ -164,6 +171,10 @@ function m34_cc_metaboxes_callback($post) {
 					dateFormat : "'.$data['args']['format'].'"
 				});
 			});
+			</script>';
+		} elseif ( $data['type'] == 'file' ) {
+			echo '<script type="text/javascript">
+				var m34_cc_bgimageId = "'.$id.'";
 			</script>';
 		}
 		echo '</p>';
